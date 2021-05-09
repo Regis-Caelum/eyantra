@@ -34,8 +34,6 @@ func formHandler(w http.ResponseWriter, r *http.Request) {
 	} else {
 		fmt.Fprintf(w, "USER NOT FOUND\n")
 	}
-	// fmt.Fprintf(w, "POST request successful %s\n", email)
-	// fmt.Fprintf(w, "POST request successful%s\n", pass)
 
 }
 
