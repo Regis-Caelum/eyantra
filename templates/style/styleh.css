@@ -1,9 +1,10 @@
-body{
+body{ 
     margin: 0;
     padding: 0;
     font-family: sans-serif;
-}
-section::before {
+ }
+
+ section::before {
     background: url('../static/bg3.jpg') no-repeat center center/cover;
     content: "";
     position: absolute;
@@ -15,9 +16,9 @@ section::before {
     opacity: 0.8;
 }
 
-.add{
-    width: 520px;
-    height: 650px;
+.hospital{
+    width: 420px;
+    height: 470px;
     background: rgb(0, 0, 0);
     color:white;
     position: absolute;
@@ -25,38 +26,41 @@ section::before {
     left: 50%;
     transform: translate(-50%,-50%);
     box-sizing: border-box;
-    padding: 40px 30px;
+    padding: 30px 30px;
     opacity: 0.8;
     border-radius: 20px;
 }
+
 h1{
     margin: 0;
     padding: 0 0 20px;
     text-align: center;
-    font-size: 22px;
+    font-size: 26px;
 }
-.add p{
+
+.hospital p{
     margin: 0;
     padding: 0;
     font-weight: bold;
  }
 
- .add input{
-    width: 100%;
-    margin-bottom: 20px;
-}
+ .hospital input{
+     width: 100%;
+     margin-bottom: 20px;
+ }
 
-.add input[type="text"] 
-{
-    border: none;
-    border-bottom: 1px solid white;
-    background: transparent;
-    outline: none;
-    height: 40px;
-    color: white;
-    font-size: 16px;
-}
-.add input[type="submit"]{
+ .hospital input[type="number"]
+ {
+     border: none;
+     border-bottom: 1px solid white;
+     background: transparent;
+     outline: none;
+     height: 40px;
+     color: white;
+     font-size: 16px;
+ }
+
+ .hospital input[type="submit"]{
      
     border: none;
     outline: none;
@@ -67,9 +71,9 @@ h1{
     border-radius: 20px;
  }
 
- .add input[type="submit"]:hover
+ .hospital input[type="submit"]:hover
  {
      cursor: pointer;
-     background:  rgb(50, 50, 211;
+     background: rgb(50, 50, 211);
      color: white;
  }

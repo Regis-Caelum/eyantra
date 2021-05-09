@@ -18,7 +18,7 @@ body{
  .loginbox{
      width: 320px;
      height: 420px;
-     background: rgb(62, 62, 209);
+     background: rgb(0, 0, 0);
      color:white;
      position: absolute;
      top: 50%;
@@ -82,7 +82,7 @@ body{
  .loginbox input[type="submit"]:hover
  {
      cursor: pointer;
-     background: #ffc107;
+     background:  rgb(50, 50, 211;
      color: white;
  }
  
