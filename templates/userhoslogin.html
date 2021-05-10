@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <link rel="stylesheet" href="./style/styleuh.css">
+</head>
+
+<body>
+    <section>
+
+        <div class="container">
+            <div class="formbox">
+                <div class="button-box">
+                    <div id="btn"></div>
+                    <button type="button" class="toggle-btn" onclick="user()">User</button>
+                    <button type="button" class="toggle-btn" onclick="hos()">Hospital</button>
+                </div>
+                <form action="" id="user" class="input-group">
+                    <input type="text" name="" class="input-field" placeholder="User Id" required >
+                    <input type="text" name="" class="input-field" placeholder="Password" required >
+                    <input type="checkbox" class="chech-box"> <span>Remember Password</span>
+                    <button type="submit" class="submit-btn">LogIn</button>
+                </form>
+
+                <form action="" id="hos" class="input-group">
+                    <input type="text" name="" class="input-field" placeholder="User Id" required >
+                    <input type="text" name="" class="input-field" placeholder="Password" required >
+                    <input type="checkbox" class="chech-box"> <span>Remember Password</span>
+                    <button type="submit" class="submit-btn">LogIn</button>
+                </form>
+            </div>
+
+        </div>
+    </section>
+    <script>
+        var x = document.getElementById("user");
+        var y = document.getElementById("hos");
+        var z = document.getElementById("btn");
+
+        function hos(){
+            x.style.left = "-400px";
+            y.style.left = "50px";
+            z.style.left = "110px";
+        }
+         function user(){
+            x.style.left = "50px";
+            y.style.left = "450px";
+            z.style.left = "0px";
+         }
+         
+    </script>
+</body>
+
+</html>

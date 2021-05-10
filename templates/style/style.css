@@ -82,19 +82,8 @@ body{
  .loginbox input[type="submit"]:hover
  {
      cursor: pointer;
-     background:  rgb(50, 50, 211;
+     background:  rgb(50, 50, 211);
      color: white;
  }
  
- .loginbox a{
-     text-decoration: none;
-     font-size: 12px;
-     line-height: 20px;
-     color: white;
-
- }
-
- .loginbox a:hover{
-     color: #ffc107;
- }
  
