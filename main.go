@@ -10,9 +10,17 @@ import (
 	"time"
 
 	_ "github.com/go-sql-driver/mysql"
+	"github.com/gorilla/sessions"
 )
 
 var tpl *template.Template
+
+var static_name string
+
+var (
+	key   = []byte("secret-key")
+	store = sessions.NewCookieStore(key)
+)
 
 func init() {
 	tpl = template.Must(template.ParseGlob("templates/*.html"))
@@ -21,22 +29,26 @@ func init() {
 func index(w http.ResponseWriter, r *http.Request) {
 	//http.ServeFile(w, r, "./templates/index.html")
 	// tpl.ExecuteTemplate(w, "index.html", nil)
+	session, _ := store.Get(r, "login")
+	session.Values["authenticated"] = true
+	session.Save(r, w)
 	if err := r.ParseForm(); err != nil {
 		fmt.Fprintf(w, "ParseForm() err: %v", err)
 		return
 	}
 	var husr, hpass, email, pass string
 
-	fmt.Println(r.PostFormValue("button"))
+	//fmt.Println(r.PostFormValue("button"))
 
 	// fmt.Fprintf(w, "POST request successful\n")
 	if r.FormValue("button") == "hospital" {
 		husr = r.PostFormValue("huser")
+		static_name = husr
 		hpass = r.PostFormValue("hpass")
 
 		check := hcheck(husr, hpass)
-		fmt.Println("Reached checkpoint")
-		fmt.Println(check)
+		//fmt.Println("Reached checkpoint")
+		//fmt.Println(check)
 		if check {
 			fmt.Println(check)
 			http.Redirect(w, r, "/hospital", http.StatusFound)
@@ -54,7 +66,7 @@ func index(w http.ResponseWriter, r *http.Request) {
 		chck := check(string(email), string(pass))
 
 		if chck {
-			fmt.Println(chck)
+			//fmt.Println(chck)
 			http.Redirect(w, r, "/main", http.StatusFound)
 			//http.ServeFile(w, r, "./templates/main.html")
 		} else {
@@ -110,7 +122,7 @@ func check(mail string, pass string) bool {
 		}
 		if passe == pass {
 			status = true
-			fmt.Println(passe)
+			//fmt.Println(passe)
 		}
 	}
 	if err := res.Err(); err != nil {
@@ -122,6 +134,11 @@ func check(mail string, pass string) bool {
 // New Entry
 func newentry(w http.ResponseWriter, r *http.Request) {
 	//http.ServeFile(w, r, "./templates/main.html")
+	session, _ := store.Get(r, "login")
+	if auth, err := session.Values["authenticated"].(bool); !err || !auth {
+		http.Error(w, "Forbidden", http.StatusForbidden)
+		return
+	}
 	tpl.ExecuteTemplate(w, "main.html", nil)
 }
 
@@ -198,6 +215,11 @@ func view(pin string) *sql.Rows {
 //Hospital handler
 
 func hospital(w http.ResponseWriter, r *http.Request) {
+	session, _ := store.Get(r, "login")
+	if auth, err := session.Values["authenticated"].(bool); !err || !auth {
+		http.Error(w, "Forbidden", http.StatusForbidden)
+		return
+	}
 	tpl.ExecuteTemplate(w, "hospital.html", nil)
 }
 
@@ -206,18 +228,22 @@ func hospitaldone(w http.ResponseWriter, r *http.Request) {
 	vent := r.FormValue("vent")
 	norm := r.FormValue("norm")
 	//fmt.Printf("%T", oxygen)
-	chck := addbeds(oxygen, vent, norm, " ")
+	chck := addbeds(oxygen, vent, norm, static_name)
 
 	if chck {
 		http.Redirect(w, r, "/hospital", http.StatusFound)
 	} else {
+
 		http.Redirect(w, r, "/", http.StatusForbidden)
 	}
 }
 
 func addbeds(oxy string, vent string, norm string, name string) bool {
 	stat := true
-	query := "UPDATE test_schema.hospital SET oxygen_beds='" + oxy + "', ventilator_beds='" + vent + "', normal_bed='" + norm + "' WHERE namess='" + name + "'"
+	//fmt.Printf(" %v, %v, %v\n", oxy, vent, norm)
+	query := "UPDATE test_schema.hospital SET oxygen_beds='" + oxy + "', ventilator_beds='" + vent + "', normal_bed='" + norm + "' WHERE namess='" + name + "';"
+	//fmt.Println(query)
+	//query := "UPDATE test_schema.hospital SET oxygen_beds='0'"
 	db, err := sql.Open("mysql", "root:yes@tcp(localhost:3306)/test_schema")
 
 	if err != nil {
@@ -246,7 +272,7 @@ func hcheck(usr string, hpass string) bool {
 	query := "SELECT passwords FROM test_schema.hospital WHERE namess ='" + usr + "'"
 	res, _ := db.Query(query)
 
-	fmt.Println("Reached checkpoint")
+	//fmt.Println("Reached checkpoint")
 	for res.Next() {
 		var passe string
 		if err := res.Scan(&passe); err != nil {
@@ -255,7 +281,7 @@ func hcheck(usr string, hpass string) bool {
 		fmt.Println(passe)
 		if passe == hpass {
 			stat = true
-			fmt.Println(passe)
+			//fmt.Println(passe)
 		}
 	}
 	if err := res.Err(); err != nil {
