@@ -157,6 +157,7 @@ func AdminLoginCheck(mail string, pass string) bool {
 
 // New Entry
 func newentry(w http.ResponseWriter, r *http.Request) {
+
 	//Getting cookie
 	session, _ := store.Get(r, "login")
 	//Checking for authentication
@@ -205,7 +206,7 @@ func newentity(district string, pin string, hospital_name string) bool {
 		fmt.Println(err.Error())
 		stat = false
 	}
-	if err != nil {
+	if errs != nil {
 		fmt.Println(errs)
 	}
 	return stat
