@@ -17,7 +17,7 @@ var tpl *template.Template
 
 var static_name string
 
-//--------------------------------------------------session variable------------------------------------------------------------
+//--------------------------------------------------session variables------------------------------------------------------------
 var (
 	key   = []byte("secret-key")
 	store = sessions.NewCookieStore(key)
@@ -59,7 +59,6 @@ func index(w http.ResponseWriter, r *http.Request) {
 		if check {
 			fmt.Println(check)
 			http.Redirect(w, r, "/hospital", http.StatusFound)
-			//http.ServeFile(w, r, "./templates/main.html")
 		} else {
 			fmt.Println(check)
 			fmt.Fprintf(w, "USER NOT FOUND\n")
@@ -73,9 +72,7 @@ func index(w http.ResponseWriter, r *http.Request) {
 		chck := AdminLoginCheck(string(email), string(pass))
 
 		if chck {
-			//fmt.Println(chck)
 			http.Redirect(w, r, "/main", http.StatusFound)
-			//http.ServeFile(w, r, "./templates/main.html")
 		} else {
 			fmt.Println(chck)
 			fmt.Fprintf(w, "USER NOT FOUND\n")
@@ -256,13 +253,11 @@ func hospitaldone(w http.ResponseWriter, r *http.Request) {
 	oxygen := r.FormValue("oxy")
 	vent := r.FormValue("vent")
 	norm := r.FormValue("norm")
-	//fmt.Printf("%T", oxygen)
 	chck := addbeds(oxygen, vent, norm, static_name)
 
 	if chck {
 		http.Redirect(w, r, "/hospital", http.StatusFound)
 	} else {
-
 		http.Redirect(w, r, "/", http.StatusForbidden)
 	}
 }
@@ -301,7 +296,6 @@ func HospitalLoginCheck(usr string, hpass string) bool {
 	query := "SELECT passwords FROM test_schema.hospital WHERE namess ='" + usr + "'"
 	res, _ := db.Query(query)
 
-	//fmt.Println("Reached checkpoint")
 	for res.Next() {
 		var passe string
 		if err := res.Scan(&passe); err != nil {
@@ -310,7 +304,6 @@ func HospitalLoginCheck(usr string, hpass string) bool {
 		fmt.Println(passe)
 		if passe == hpass {
 			stat = true
-			//fmt.Println(passe)
 		}
 	}
 	if err := res.Err(); err != nil {
@@ -319,8 +312,7 @@ func HospitalLoginCheck(usr string, hpass string) bool {
 	return stat
 }
 
-//-------------------------------------------------------------------------------------------------------------------------------------
-
+//---------------------------------------------------------Random Sting Generator------------------------------------------------------------------------
 func init() {
 	rand.Seed(time.Now().UnixNano())
 }
