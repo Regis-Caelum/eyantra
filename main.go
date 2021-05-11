@@ -17,38 +17,45 @@ var tpl *template.Template
 
 var static_name string
 
+//--------------------------------------------------session variable------------------------------------------------------------
 var (
 	key   = []byte("secret-key")
 	store = sessions.NewCookieStore(key)
 )
 
+//--------------------------------------------------Template initializer---------------------------------------------------------
+
 func init() {
 	tpl = template.Must(template.ParseGlob("templates/*.html"))
 }
 
+//---------------------------------------------------index handler---------------------------------------------------------------
+
 func index(w http.ResponseWriter, r *http.Request) {
-	//http.ServeFile(w, r, "./templates/index.html")
-	// tpl.ExecuteTemplate(w, "index.html", nil)
+	//creating session
 	session, _ := store.Get(r, "login")
 	session.Values["authenticated"] = true
+
+	//Saving session value
 	session.Save(r, w)
+
+	//Identifying error in parsing the request
 	if err := r.ParseForm(); err != nil {
 		fmt.Fprintf(w, "ParseForm() err: %v", err)
 		return
 	}
+
+	//variables for authentication
 	var husr, hpass, email, pass string
 
-	//fmt.Println(r.PostFormValue("button"))
-
-	// fmt.Fprintf(w, "POST request successful\n")
+	// checking if user wants the log in for root dashboard or hospital dashboard
 	if r.FormValue("button") == "hospital" {
 		husr = r.PostFormValue("huser")
 		static_name = husr
 		hpass = r.PostFormValue("hpass")
 
-		check := hcheck(husr, hpass)
-		//fmt.Println("Reached checkpoint")
-		//fmt.Println(check)
+		check := HospitalLoginCheck(husr, hpass)
+
 		if check {
 			fmt.Println(check)
 			http.Redirect(w, r, "/hospital", http.StatusFound)
@@ -63,7 +70,7 @@ func index(w http.ResponseWriter, r *http.Request) {
 	if r.FormValue("buttons") == "root" {
 		email = r.PostFormValue("auser")
 		pass = r.PostFormValue("apass")
-		chck := check(string(email), string(pass))
+		chck := AdminLoginCheck(string(email), string(pass))
 
 		if chck {
 			//fmt.Println(chck)
@@ -80,51 +87,71 @@ func index(w http.ResponseWriter, r *http.Request) {
 
 // MAIN FUNCTION
 func main() {
+	//Indicating that the server is up and running
 	fmt.Println("Serving at localhost:8080...")
+
+	//Saving templates directory in the fileServer variable
 	fileServer := http.FileServer(http.Dir("./templates"))
+
+	//Adding routes
 	http.Handle("/", fileServer)
-	//http.HandleFunc("/", index)
 	http.HandleFunc("/login", index)
 	http.HandleFunc("/main", newentry)
 	http.HandleFunc("/done", temp)
 	http.HandleFunc("/hospital", hospital)
 	http.HandleFunc("/hospitaldone", hospitaldone)
-	http.HandleFunc("/view", viewhandler)
-	http.HandleFunc("/error", errored)
+	// http.HandleFunc("/view", viewhandler)
+	// http.HandleFunc("/error", errored)
+
+	//Listening on port 8080
 	http.ListenAndServe(":8080", nil)
 }
 
-func errored(w http.ResponseWriter, r *http.Request) {
-	fmt.Fprintf(w, "Error")
-}
+// func errored(w http.ResponseWriter, r *http.Request) {
+// 	fmt.Fprintf(w, "Error")
+// }
 
 // Check in database for email and it's corresponding password
-func check(mail string, pass string) bool {
+func AdminLoginCheck(mail string, pass string) bool {
+	//variable for return
 	status := false
+
+	//opening connection to mysql database
 	db, err := sql.Open("mysql", "root:yes@tcp(localhost:3306)/test_schema")
 
+	//checking for error in the connection
 	if err != nil {
 		fmt.Printf("not connected")
 	}
-
+	//delayed the closing connection for database
 	defer db.Close()
 
+	//SQL query
 	query := "SELECT Passwords FROM test_schema.database WHERE Email ='" + mail + "'"
+
+	//Executing query
 	res, err := db.Query(query)
 
+	//Checking for errors
 	if err != nil {
 		panic(err.Error())
 	}
+
+	//Going the thr result set rows and storing every row in the string variable
 	for res.Next() {
-		var passe string
-		if err := res.Scan(&passe); err != nil {
+		var password string
+		//storing row in the string variable and checking for errors in the process simultaneously
+		if err := res.Scan(&password); err != nil {
 			log.Fatal(err)
 		}
-		if passe == pass {
+
+		//If the password matches with the entered value then changing the state of status variable
+		if password == pass {
 			status = true
-			//fmt.Println(passe)
 		}
 	}
+
+	//Checking for error in the res variable
 	if err := res.Err(); err != nil {
 		log.Fatal(err)
 	}
@@ -133,26 +160,28 @@ func check(mail string, pass string) bool {
 
 // New Entry
 func newentry(w http.ResponseWriter, r *http.Request) {
-	//http.ServeFile(w, r, "./templates/main.html")
+	//Getting cookie
 	session, _ := store.Get(r, "login")
+	//Checking for authentication
 	if auth, err := session.Values["authenticated"].(bool); !err || !auth {
 		http.Error(w, "Forbidden", http.StatusForbidden)
 		return
 	}
+	//If condition satisfies executing the template
 	tpl.ExecuteTemplate(w, "main.html", nil)
 }
 
 func temp(w http.ResponseWriter, r *http.Request) {
-
+	//Variables for storing the data in the database
 	district := r.FormValue("district")
 	pin := r.FormValue("pin")
 	hospital_name := r.FormValue("name")
 
-	//fmt.Printf("%v %v %v\n", district, pin, hospital_name)
+	//Entering the new entry and checking for error simultaneously by passing a flag
 	chck := newentity(district, pin, hospital_name)
 
+	//If flag holds redirecting to rew route
 	if chck {
-		//fmt.Printf("working...\n")
 		http.Redirect(w, r, "/main", http.StatusFound)
 	} else {
 		http.Redirect(w, r, "/", http.StatusFound)
@@ -186,31 +215,31 @@ func newentity(district string, pin string, hospital_name string) bool {
 }
 
 //view table
-func viewhandler(w http.ResponseWriter, r *http.Request) {
-	res := view(r.FormValue("pin"))
+// func viewhandler(w http.ResponseWriter, r *http.Request) {
+// 	res := view(r.FormValue("pin"))
 
-	for res.Next() {
-		var table string
-		if err := res.Scan(&table); err != nil {
-			log.Fatal(err)
-		}
-		fmt.Fprintf(w, table+"\n")
-	}
-}
+// 	for res.Next() {
+// 		var table string
+// 		if err := res.Scan(&table); err != nil {
+// 			log.Fatal(err)
+// 		}
+// 		fmt.Fprintf(w, table+"\n")
+// 	}
+// }
 
-func view(pin string) *sql.Rows {
-	db, err := sql.Open("mysql", "root:yes@tcp(localhost:3306)/test_schema")
+// func view(pin string) *sql.Rows {
+// 	db, err := sql.Open("mysql", "root:yes@tcp(localhost:3306)/test_schema")
 
-	if err != nil {
-		fmt.Printf("not connected")
-	}
-	defer db.Close()
-	query := "SELECT name FROM test_schema.data WHERE pincode ='" + pin + "';"
+// 	if err != nil {
+// 		fmt.Printf("not connected")
+// 	}
+// 	defer db.Close()
+// 	query := "SELECT name FROM test_schema.data WHERE pincode ='" + pin + "';"
 
-	res, _ := db.Query(query)
+// 	res, _ := db.Query(query)
 
-	return res
-}
+// 	return res
+// }
 
 //Hospital handler
 
@@ -261,7 +290,7 @@ func addbeds(oxy string, vent string, norm string, name string) bool {
 	return stat
 }
 
-func hcheck(usr string, hpass string) bool {
+func HospitalLoginCheck(usr string, hpass string) bool {
 	stat := false
 	db, err := sql.Open("mysql", "root:yes@tcp(localhost:3306)/test_schema")
 
