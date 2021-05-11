@@ -78,6 +78,7 @@ section::before {
         border-bottom: 1px solid #999;
         outline: none;
         background: transparent;
+        color: white;
     }
 
     .submit-btn{

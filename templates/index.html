@@ -16,20 +16,20 @@
             <div class="formbox">
                 <div class="button-box">
                     <div id="btn"></div>
-                    <button type="button" class="toggle-btn" onclick="user()">User</button>
-                    <button type="button" class="toggle-btn" onclick="hos()">Hospital</button>
+                    <button type="button" class="toggle-btn" onclick="user()" >Root</button>
+                    <button type="button" class="toggle-btn" onclick="hos()" >Hospital</button>
                 </div>
-                <form action="/main" id="user" class="input-group">
-                    <input type="text" name="" class="input-field" placeholder="User Id" required >
-                    <input type="text" name="" class="input-field" placeholder="Password" required >
-                    <input type="checkbox" class="chech-box"> <span>Remember Password</span>
+                <form action="/login" id="user" class="input-group" method="POST">
+                    <input type="text" name="auser" class="input-field" placeholder="User Id" required >
+                    <input type="text" name="apass" class="input-field" placeholder="Password" required >
+                    <input type="checkbox" class="chech-box" name="buttons" value="root"> <span>Root</span>
                     <button type="submit" class="submit-btn">LogIn</button>
                 </form>
 
-                <form action="/main" id="hos" class="input-group">
-                    <input type="text" name="" class="input-field" placeholder="User Id" required >
-                    <input type="text" name="" class="input-field" placeholder="Password" required >
-                    <input type="checkbox" class="chech-box"> <span>Remember Password</span>
+                <form action="/login" id="hos" class="input-group" method="POST">
+                    <input type="text" name="huser" class="input-field" placeholder="User Id" required >
+                    <input type="text" name="hpass" class="input-field" placeholder="Password" required >
+                    <input type="checkbox" class="chech-box" name="button" value="hospital"> <span>Hospital user</span>
                     <button type="submit" class="submit-btn">LogIn</button>
                 </form>
             </div>
