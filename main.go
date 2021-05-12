@@ -17,6 +17,10 @@ var tpl *template.Template
 
 var static_name string
 
+// type table struct {
+// 	rows [90]string
+// }
+
 //--------------------------------------------------session variables------------------------------------------------------------
 var (
 	key   = []byte("secret-key")
@@ -98,14 +102,22 @@ func main() {
 	http.HandleFunc("/hospital", hospital)
 	http.HandleFunc("/hospitaldone", hospitaldone)
 	// http.HandleFunc("/view", viewhandler)
-	// http.HandleFunc("/error", errored)
+	// http.HandleFunc("/error", search)
 
 	//Listening on port 8080
 	http.ListenAndServe(":8080", nil)
 }
 
-// func errored(w http.ResponseWriter, r *http.Request) {
-// 	fmt.Fprintf(w, "Error")
+// func search(w http.ResponseWriter, r *http.Request) {
+//  	//Getting cookie
+// 	session, _ := store.Get(r, "login")
+// 	//Checking for authentication
+// 	if auth, err := session.Values["authenticated"].(bool); !err || !auth {
+// 		http.Error(w, "Forbidden", http.StatusForbidden)
+// 		return
+// 	}
+// 	//If condition satisfies executing the template
+// 	tpl.ExecuteTemplate(w, "search.html", nil)
 // }
 
 // Check in database for email and it's corresponding password
@@ -214,25 +226,43 @@ func newentity(district string, pin string, hospital_name string) bool {
 
 //view table
 // func viewhandler(w http.ResponseWriter, r *http.Request) {
-// 	res := view(r.FormValue("pin"))
-
+//	db, err := sql.Open("mysql", "root:yes@tcp(localhost:3306)/test_schema")
+//
+// 	if err != nil {
+// 		fmt.Printf("not connected")
+// 	}
+// 	defer db.Close()
+//	query := "SELECT namess FROM test_schema.data WHERE pincode='" + r.FormValue("pin") + "';"
+//	res1,_ := db.Query(query)
+//	var named string
+//  for res1.Next() {
+//
+// 	 if err := res1.Scan(&named); err != nil {
+// 		 log.Fatal(err)
+// 	 }
+//
+//  }
+// 	res := view(named)
+//  i := 0
 // 	for res.Next() {
-// 		var table string
-// 		if err := res.Scan(&table); err != nil {
+// 		var row string
+// 		if err := res.Scan(&row); err != nil {
 // 			log.Fatal(err)
 // 		}
-// 		fmt.Fprintf(w, table+"\n")
+// 		p = table{row[i]: row}
+// 		i = i+1
+// 		fmt.Fprintf(w, row+"\n")
 // 	}
 // }
 
-// func view(pin string) *sql.Rows {
+// func view(name string) *sql.Rows {
 // 	db, err := sql.Open("mysql", "root:yes@tcp(localhost:3306)/test_schema")
 
 // 	if err != nil {
 // 		fmt.Printf("not connected")
 // 	}
 // 	defer db.Close()
-// 	query := "SELECT name FROM test_schema.data WHERE pincode ='" + pin + "';"
+// 	query := "SELECT namess, oxygen_beds, ventilator_beds, normal_bed FROM test_schema.data WHERE namess ='" + name + "';"
 
 // 	res, _ := db.Query(query)
 
