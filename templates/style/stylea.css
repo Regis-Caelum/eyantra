@@ -70,6 +70,17 @@ h1{
  .add input[type="submit"]:hover
  {
      cursor: pointer;
-     background:  rgb(50, 50, 211;
+     background:  rgb(50, 50, 211);
      color: white;
+ }
+
+ .container{
+     display: grid;
+    grid-template-columns: 5fr 6fr;
+    gridro
+ }
+
+ .add1{
+     border: 2px solid black;
+     background-color: blue;
  }

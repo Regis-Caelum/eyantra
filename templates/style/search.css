@@ -2,6 +2,41 @@
     margin: 0;
     padding: 0;
 }
+.navbar{
+    margin-top: 6px;
+    border: 2px solid black;
+    width: 99%;
+    height: 45px;
+    background-color: black;
+    color: white;
+    opacity: 0.7;
+    border-radius: 30px;
+    margin-left: 3px;
+   
+}
+.navbar ul{
+    overflow: auto;
+}
+
+.navbar li{
+    float: left;
+    list-style: none;
+    padding: 3px 22px;
+    margin-top: 10px;
+    margin-left: 10px;
+    font-size: 17px;
+}
+.l4{
+    position: relative;
+    left: 1050px;
+}
+.navbar li a{
+    text-decoration: none;
+    color: white;
+}
+.navbar li :hover{
+    color: rgb(0, 255, 0);
+}
 section{
     display: flex;
     justify-content: center;
@@ -22,35 +57,42 @@ section::before {
     opacity: 0.8;
 }
 
-.container{
-    /* border: 2px solid black; */
+/* .container{
+    border: 2px solid black;
     width: 400px;
     height: 150px;
     display: block;    
-}
+} */
 
 .searchbox{
     position: relative;
     top: 50px;
-    left: 31px;
+    left: -14px;
     padding: 2px 10px;
+    color: black;
+     border: 2px solid black;
+    outline: none;
+    box-shadow: 1px 2px rgb(29, 146, 224);
 }
 
 .container input[type="text"]{
-    border: 2px solid black;
+   
     border-radius: 20px; 
-    height: 20px;
-    width: 250px;
-    color: white;
+    height: 30px;
+    width: 400px;
+    color: black;
     font-size: 16px;
+    border: none;
 }
 
 .container input[type="submit"] {
-    border: 2px solid black;
+    /* border: 2px solid black; */
     border-radius: 20px;
-    height: 29px;
+    height: 33px;
     width: 77px;
     font-size: 16px;
+    
+   
 }
 .btn {
     position: relative;
@@ -58,4 +100,9 @@ section::before {
     height: 20px;
     width: 60px;
     margin: 50px 4px;
+    outline: none;
+}
+
+.btn :hover{
+    color: burlywood;
 }
