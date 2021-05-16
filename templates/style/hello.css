@@ -54,7 +54,7 @@ h1{
     background: transparent;
     outline: none;
     height: 30px;
-    color: white;
+    color: rgb(0, 0, 0);
     font-size: 14px;
 }
 .add input[type="number"]
@@ -64,7 +64,7 @@ h1{
     background: transparent;
     outline: none;
     height: 30px;
-    color: white;
+    color: rgb(0, 0, 0);
     font-size: 14px;
     width: 100%;
 }

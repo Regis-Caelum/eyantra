@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -7,9 +8,10 @@
     <title>Add Page</title>
     <link rel="stylesheet" href="./style/hello.css">
 </head>
+
 <body>
     <header>
-      
+
         <nav class="navbar">
             <ul>
                 <li class="l1"><a href="#">Home</a></li>
@@ -18,7 +20,7 @@
                 <li class="l4"><a href="#">Log Out</a></li>
             </ul>
         </nav>
-    
+
     </header>
     <div class="container">
         <div class="box" id="box1">
@@ -51,14 +53,23 @@
         </div>
         <div class="box" id="box2">
             <h2>List of Hospitals</h2>
-            <h4>Name------------>Pincode------------>District</h4>
-            {{range .}}
-                <div>
-                    <p>{{.Name}}------------>{{.Pincode}}------------>{{.District}} </p>
-                </div>
-            {{end}}
+
+            <table>
+                <th>Name</th>
+                <th>Pincode</th>
+                <th>District</th>
+                {{range .}}
+                <tr>
+                    <td>{{.Name}}</td>
+                    <td>{{.Pincode}}</td>
+                    <td>{{.District}}</td>
+                </tr>
+                {{end}}
+            </table>
+
         </div>
     </div>
-    
+
 </body>
+
 </html>
