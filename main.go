@@ -6,8 +6,9 @@ import (
 	"html/template"
 	"log"
 	"math/rand"
+
+	//"math/rand"
 	"net/http"
-	"time"
 
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/gorilla/sessions"
@@ -17,9 +18,13 @@ var tpl *template.Template
 
 var static_name string
 
-// type table struct {
-// 	rows [90]string
-// }
+type hospital_list struct {
+	district, pincode, name string
+}
+
+func (p *hospital_list) District() string { return p.district }
+func (p *hospital_list) Pincode() string  { return p.pincode }
+func (p *hospital_list) Name() string     { return p.name }
 
 //--------------------------------------------------session variables------------------------------------------------------------
 var (
@@ -61,10 +66,8 @@ func index(w http.ResponseWriter, r *http.Request) {
 		check := HospitalLoginCheck(husr, hpass)
 
 		if check {
-			fmt.Println(check)
 			http.Redirect(w, r, "/hospital", http.StatusFound)
 		} else {
-			fmt.Println(check)
 			fmt.Fprintf(w, "USER NOT FOUND\n")
 			http.Redirect(w, r, "/", http.StatusFound)
 		}
@@ -78,7 +81,6 @@ func index(w http.ResponseWriter, r *http.Request) {
 		if chck {
 			http.Redirect(w, r, "/main", http.StatusFound)
 		} else {
-			fmt.Println(chck)
 			fmt.Fprintf(w, "USER NOT FOUND\n")
 			http.Redirect(w, r, "/", http.StatusFound)
 		}
@@ -106,6 +108,7 @@ func main() {
 
 	//Listening on port 8080
 	http.ListenAndServe(":8080", nil)
+
 }
 
 // func search(w http.ResponseWriter, r *http.Request) {
@@ -167,6 +170,8 @@ func AdminLoginCheck(mail string, pass string) bool {
 	return status
 }
 
+var hospital_lists [21]hospital_list
+
 // New Entry
 func newentry(w http.ResponseWriter, r *http.Request) {
 
@@ -177,8 +182,38 @@ func newentry(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "Forbidden", http.StatusForbidden)
 		return
 	}
+
+	db, _ := sql.Open("mysql", "root:yes@tcp(localhost:3306)/test_schema")
+
+	defer db.Close()
+
+	query := "SELECT * FROM test_schema.data;"
+
+	res, _ := db.Query(query)
+
+	i := 0
+	for res.Next() {
+		var dist, pin, nam string
+		err := res.Scan(&dist, &pin, &nam)
+		hospital_lists[i] = hospital_list{
+			district: dist,
+			pincode:  pin,
+			name:     nam,
+		}
+		i = i + 1
+		if err != nil {
+			log.Println(err.Error())
+			return
+		}
+
+	}
+
+	// for _, s := range hospital_lists {
+	// 	fmt.Printf(" %v %v %v\n", s.district, s.name, s.pincode)
+	// }
+
 	//If condition satisfies executing the template
-	tpl.ExecuteTemplate(w, "main.html", nil)
+	tpl.ExecuteTemplate(w, "main.html", &hospital_lists)
 }
 
 func temp(w http.ResponseWriter, r *http.Request) {
@@ -198,6 +233,8 @@ func temp(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+//var keyd = []byte("surprisemf")
+
 // Connection to New database on same server
 func newentity(district string, pin string, hospital_name string) bool {
 	stat := true
@@ -211,7 +248,12 @@ func newentity(district string, pin string, hospital_name string) bool {
 
 	query := "INSERT INTO test_schema.data (namess, pincode, district) SELECT * FROM (SELECT '" + hospital_name + "' AS namess, '" + pin + "' AS pincode, '" + district + "' AS district) AS temp WHERE NOT EXISTS( SELECT namess FROM test_schema.data WHERE district='" + district + "' AND pincode='" + pin + "');"
 
-	_, errs := db.Query(" INSERT INTO test_schema.hospital (namess, passwords, oxygen_beds, ventilator_beds, normal_bed) SELECT * FROM (SELECT '" + hospital_name + "' AS namess, '" + RandStringRunes(4) + "' AS passwords, '0' AS oxygen_beds,'0' AS ventilator_beds,'0' AS normal_bed) AS tmp WHERE NOT EXISTS ( SELECT namess FROM test_schema.hospital WHERE namess = '" + hospital_name + "' );")
+	password := RandStringRunes(4)
+	//fmt.Println(password)
+	//ciphertext, _ := encrypt(keyd, []byte(password))
+	//fmt.Println(string(ciphertext))
+	_, errs := db.Query(" INSERT INTO test_schema.hospital (namess, passwords, oxygen_beds, ventilator_beds, normal_bed) SELECT * FROM (SELECT '" + hospital_name + "' AS namess, '" + password + "' AS passwords, '0' AS oxygen_beds,'0' AS ventilator_beds,'0' AS normal_bed) AS tmp WHERE NOT EXISTS ( SELECT namess FROM test_schema.hospital WHERE namess = '" + hospital_name + "' );")
+	//fmt.Println(" INSERT INTO test_schema.hospital (namess, passwords, oxygen_beds, ventilator_beds, normal_bed) SELECT * FROM (SELECT '" + hospital_name + "' AS namess, '" + password + "' AS passwords, '0' AS oxygen_beds,'0' AS ventilator_beds,'0' AS normal_bed) AS tmp WHERE NOT EXISTS ( SELECT namess FROM test_schema.hospital WHERE namess = '" + hospital_name + "' );")
 	_, err = db.Query(query)
 
 	if err != nil {
@@ -332,8 +374,9 @@ func HospitalLoginCheck(usr string, hpass string) bool {
 		if err := res.Scan(&passe); err != nil {
 			log.Fatal(err)
 		}
+		//temp, _ := decrypt(keyd, []byte(passe))
 		fmt.Println(passe)
-		if passe == hpass {
+		if string(passe) == hpass {
 			stat = true
 		}
 	}
@@ -344,9 +387,6 @@ func HospitalLoginCheck(usr string, hpass string) bool {
 }
 
 //---------------------------------------------------------Random Sting Generator------------------------------------------------------------------------
-func init() {
-	rand.Seed(time.Now().UnixNano())
-}
 
 var letterRunes = []rune("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ")
 

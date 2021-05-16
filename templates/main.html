@@ -1,17 +1,27 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Main Page</title>
-    <link rel="stylesheet" href="./style/stylea.css">
+    <title>Add Page</title>
+    <link rel="stylesheet" href="./style/hello.css">
 </head>
-
 <body>
-    <section>
-        <div class="container">
+    <header>
+      
+        <nav class="navbar">
+            <ul>
+                <li class="l1"><a href="#">Home</a></li>
+                <li class="l2"><a href="#">Contact us</a></li>
+                <li class="l3"><a href="#">About us</a></li>
+                <li class="l4"><a href="#">Log Out</a></li>
+            </ul>
+        </nav>
+    
+    </header>
+    <div class="container">
+        <div class="box" id="box1">
             <div class="add">
                 <h1>Add Hospitals</h1>
                 <form action="/done" method="POST">
@@ -30,18 +40,25 @@
 
                     <p>Address: <input type="text" name="" placeholder="Address"></p>
                     <br>
+                    <p class="p1">Phone1: <input type="number" name="" placeholder="Phone1"></p>
+                    <p class="p2">Phone2: <input type="number" name="" placeholder="Phone1"></p>
+                    <br>
 
                     <input type="Submit" value="Submit Now">
 
                 </form>
             </div>
-            <div class="add1">
-                Hello World
-            </div>
         </div>
-       
-    </section>
-
+        <div class="box" id="box2">
+            <h2>List of Hospitals</h2>
+            <h4>Name------------>Pincode------------>District</h4>
+            {{range .}}
+                <div>
+                    <p>{{.Name}}------------>{{.Pincode}}------------>{{.District}} </p>
+                </div>
+            {{end}}
+        </div>
+    </div>
+    
 </body>
-
 </html>
