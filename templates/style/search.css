@@ -30,6 +30,10 @@
     position: relative;
     left: 1050px;
 }
+.l5{
+    position: relative;
+    left: 860px;
+}
 .navbar li a{
     text-decoration: none;
     color: white;
