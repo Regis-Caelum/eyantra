@@ -127,3 +127,29 @@ h1{
 .navbar li :hover{
     color: rgb(0, 255, 0);
 }
+
+table{
+    position: absolute;
+    top: 45%;
+    left: 62%;
+    /* transform: translate(-50%,-50%); */
+    width: 30%;
+    height: auto;
+    box-shadow: 0 5px 12px rbga(32,32,32,.3);
+    text-align: center;
+    overflow: hidden;
+    border-radius: 10px 10px 0 0 ;
+    border-spacing: 0;
+}
+
+th,td{
+    padding: 10px,12px;
+}
+
+th{
+    background: #ba68c8;
+}
+tr:nth-child(odd){
+    background-color: #eeeeee;
+
+}
