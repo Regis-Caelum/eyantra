@@ -34,6 +34,23 @@
                 </form>
             </div>
         </form>
+        <div class="box" id="box2">
+            <table>
+            <tr>
+                <th>Hospital Name</th>
+                <th>Pincode</th>
+                <th>District</th>
+            </tr>
+                {{range .}}
+                <tr>
+                    <td>{{.name}}</td>
+                    <td>{{.oxy}}</td>
+                    <td>{{.vent}}</td>
+                </tr>
+                {{end}}
+            </table>
+
+        </div>
     </section>
 </body>
 

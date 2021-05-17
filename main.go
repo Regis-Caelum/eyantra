@@ -139,7 +139,21 @@ func search(w http.ResponseWriter, r *http.Request) {
 	//delayed the closing connection for database
 	defer db.Close()
 
-	query := "SELECT * FROM test_schema.hospital;"
+	text := r.FormValue("text")
+
+	if text == "" {
+		http.Redirect(w, r, "/", http.StatusFound)
+		return
+	}
+
+	q := "SELECT namess FROM test_schema.data WHERE pincode=" + text + "';"
+
+	result, _ := db.Query(q)
+
+	var temp string
+	result.Scan(&temp)
+
+	query := "SELECT * FROM test_schema.hospital WHERE namess='" + temp + "';"
 
 	res, _ := db.Query(query)
 
@@ -149,10 +163,19 @@ func search(w http.ResponseWriter, r *http.Request) {
 		if err != nil {
 			panic(err.Error())
 		}
+		details := Info{
+			nam,
+			o,
+			v,
+			no,
+		}
+
+		info = append(info, details)
 	}
 
+	tpl.ExecuteTemplate(w, "index.html", &info)
 	//If condition satisfies executing the template
-	http.Redirect(w, r, "/searching", http.StatusFound)
+	http.Redirect(w, r, "/search", http.StatusFound)
 }
 
 // Check in database for email and it's corresponding password
