@@ -120,6 +120,11 @@ type Info struct {
 	vent string
 }
 
+func (p *Info) Name() string { return p.name }
+func (p *Info) Oxy() string  { return p.oxy }
+func (p *Info) Norm() string { return p.norm }
+func (p *Info) Vent() string { return p.vent }
+
 var info []Info
 
 func searching(w http.ResponseWriter, r *http.Request) {
@@ -146,33 +151,68 @@ func search(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	q := "SELECT namess FROM test_schema.data WHERE pincode=" + text + "';"
+	q := "SELECT namess FROM test_schema.data WHERE pincode='" + text + "';"
 
 	result, _ := db.Query(q)
 
-	var temp string
-	result.Scan(&temp)
-
-	query := "SELECT * FROM test_schema.hospital WHERE namess='" + temp + "';"
-
-	res, _ := db.Query(query)
-
-	for res.Next() {
-		var nam, o, v, no, temp string
-		err = res.Scan(&nam, &temp, &o, &v, &no)
+	var list []string
+	for result.Next() {
+		var temp string
+		err := result.Scan(&temp)
 		if err != nil {
 			panic(err.Error())
 		}
-		details := Info{
-			nam,
-			o,
-			v,
-			no,
-		}
-
-		info = append(info, details)
+		list = append(list, temp)
 	}
 
+	for _, s := range list {
+		fmt.Println(s)
+		query := "SELECT * FROM test_schema.hospital WHERE namess='" + s + "';"
+
+		res, _ := db.Query(query)
+
+		for res.Next() {
+			var nam, o, v, no, temp string
+			err = res.Scan(&nam, &temp, &o, &v, &no)
+			if err != nil {
+				panic(err.Error())
+			}
+			details := Info{
+				name: nam,
+				oxy:  o,
+				vent: v,
+				norm: no,
+			}
+
+			fmt.Println(details)
+
+			info = append(info, details)
+		}
+	}
+
+	// query := "SELECT * FROM test_schema.hospital WHERE namess='" + list[0] + "';"
+
+	// res, _ := db.Query(query)
+
+	// for res.Next() {
+	// 	var nam, o, v, no, temp string
+	// 	err = res.Scan(&nam, &temp, &o, &v, &no)
+	// 	if err != nil {
+	// 		panic(err.Error())
+	// 	}
+	// 	details := Info{
+	// 		nam,
+	// 		o,
+	// 		v,
+	// 		no,
+	// 	}
+
+	// 	fmt.Printf("%v\n", details)
+
+	// 	info = append(info, details)
+	// }
+
+	fmt.Printf("%v\n", len(info))
 	tpl.ExecuteTemplate(w, "index.html", &info)
 	//If condition satisfies executing the template
 	http.Redirect(w, r, "/search", http.StatusFound)
@@ -225,7 +265,7 @@ func AdminLoginCheck(mail string, pass string) bool {
 	return status
 }
 
-var hospital_lists [21]hospital_list
+var hospital_lists []hospital_list
 
 // New Entry
 func newentry(w http.ResponseWriter, r *http.Request) {
@@ -250,11 +290,11 @@ func newentry(w http.ResponseWriter, r *http.Request) {
 	for res.Next() {
 		var dist, pin, nam string
 		err := res.Scan(&dist, &pin, &nam)
-		hospital_lists[i] = hospital_list{
+		hospital_lists = append(hospital_lists, hospital_list{
 			district: dist,
 			pincode:  pin,
 			name:     nam,
-		}
+		})
 		i = i + 1
 		if err != nil {
 			log.Println(err.Error())

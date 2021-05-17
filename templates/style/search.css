@@ -138,3 +138,11 @@ tr:nth-child(odd){
     background-color: #eeeeee;
 
 }
+
+.box{
+    border: 2px solid black;
+    height: 1080px;
+    padding: 20px;
+    margin: 20px;
+    
+}

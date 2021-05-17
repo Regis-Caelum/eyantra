@@ -35,15 +35,17 @@
         <div class="box" id="box2">
             <table>
             <tr>
-                <th>Hospital Name</th>
-                <th>Pincode</th>
-                <th>District</th>
+                <th>Name</th>
+                <th>No. of Oxygen beds</th>
+                <th>No. of Ventilator beds</th>
+                <th>No. of Normal beds</th>
             </tr>
                 {{range .}}
                 <tr>
-                    <td>{{.name}}</td>
-                    <td>{{.oxy}}</td>
-                    <td>{{.vent}}</td>
+                    <td>{{.Name}}</td>
+                    <td>{{.Oxy}}</td>
+                    <td>{{.Vent}}</td>
+                    <td>{{.Norm}}</td>
                 </tr>
                 {{end}}
             </table>
