@@ -5,8 +5,8 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Search</title>
-    <link rel="stylesheet" href="./style/search.css">
+    <title>Login</title>
+    <link rel="stylesheet" href="./style/styleuh.css">
 </head>
 
 <body>
@@ -21,20 +21,38 @@
                 </div>
                 <form action="/login" id="user" class="input-group" method="POST">
                     <input type="text" name="auser" class="input-field" placeholder="User Id" required >
-                    <input type="password" name="apass" class="input-field" placeholder="Password" required >
+                    <input type="text" name="apass" class="input-field" placeholder="Password" required >
                     <input type="checkbox" class="chech-box" name="buttons" value="root"> <span>Root</span>
                     <button type="submit" class="submit-btn">LogIn</button>
                 </form>
 
                 <form action="/login" id="hos" class="input-group" method="POST">
                     <input type="text" name="huser" class="input-field" placeholder="User Id" required >
-                    <input type="password" name="hpass" class="input-field" placeholder="Password" required >
+                    <input type="text" name="hpass" class="input-field" placeholder="Password" required >
                     <input type="checkbox" class="chech-box" name="button" value="hospital"> <span>Hospital user</span>
                     <button type="submit" class="submit-btn">LogIn</button>
                 </form>
             </div>
-        </form>
+
+        </div>
     </section>
+    <script>
+        var x = document.getElementById("user");
+        var y = document.getElementById("hos");
+        var z = document.getElementById("btn");
+
+        function hos(){
+            x.style.left = "-400px";
+            y.style.left = "50px";
+            z.style.left = "110px";
+        }
+         function user(){
+            x.style.left = "50px";
+            y.style.left = "450px";
+            z.style.left = "0px";
+         }
+         
+    </script>
 </body>
 
 </html>
