@@ -67,7 +67,7 @@ section::before {
 .searchbox{
     position: relative;
     top: 50px;
-    left: -14px;
+    left: 76px;
     padding: 2px 10px;
     color: black;
      border: 2px solid black;
@@ -105,4 +105,36 @@ section::before {
 
 .btn :hover{
     color: burlywood;
+}
+
+.box{
+    position: relative;
+    top: 13%;
+    left: -23%;
+}
+
+table{
+    position: absolute;
+    top: 20%;
+    left: 65%;
+    /* transform: translate(-50%,-50%); */
+    width: 30%;
+    height: auto;
+    box-shadow: 0 5px 12px rbga(32,32,32,.3);
+    text-align: center;
+    overflow: hidden;
+    border-radius: 10px 10px 0 0 ;
+    border-spacing: 0;
+}
+
+th,td{
+    padding: 10px,12px;
+}
+
+th{
+    background: #ba68c8;
+}
+tr:nth-child(odd){
+    background-color: #eeeeee;
+
 }
