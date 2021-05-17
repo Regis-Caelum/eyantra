@@ -7,8 +7,6 @@ import (
 	"log"
 	"math/rand"
 	"net"
-
-	//"math/rand"
 	"net/http"
 
 	_ "github.com/go-sql-driver/mysql"
@@ -111,10 +109,8 @@ func main() {
 	http.HandleFunc("/search", search)
 	http.HandleFunc("/hospital", hospital)
 	http.HandleFunc("/hospitaldone", hospitaldone)
-	// http.HandleFunc("/view", viewhandler)
-	// http.HandleFunc("/error", search)
 
-	//Listening on port 8080
+	//Listening on any free port given by the OS
 	http.Serve(listener, nil)
 
 }
@@ -139,7 +135,6 @@ func searching(w http.ResponseWriter, r *http.Request) {
 }
 
 func search(w http.ResponseWriter, r *http.Request) {
-	//tpl.ExecuteTemplate(w,"index.html",)
 	//opening connection to mysql database
 	db, err := sql.Open("mysql", "root:yes@tcp(localhost:3306)/test_schema")
 
@@ -172,7 +167,6 @@ func search(w http.ResponseWriter, r *http.Request) {
 	}
 
 	for _, s := range list {
-		//fmt.Println(s)
 		query := "SELECT * FROM test_schema.hospital WHERE namess='" + s + "';"
 
 		res, _ := db.Query(query)
@@ -189,8 +183,6 @@ func search(w http.ResponseWriter, r *http.Request) {
 				vent: v,
 				norm: no,
 			}
-
-			//fmt.Println(details)
 
 			info = append(info, details)
 		}
@@ -286,10 +278,6 @@ func newentry(w http.ResponseWriter, r *http.Request) {
 
 	}
 
-	// for _, s := range hospital_lists {
-	// 	fmt.Printf(" %v %v %v\n", s.district, s.name, s.pincode)
-	// }
-
 	//If condition satisfies executing the template
 	tpl.ExecuteTemplate(w, "main.html", &hospital_lists)
 	hospital_lists = nil
@@ -312,8 +300,6 @@ func temp(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-//var keyd = []byte("surprisemf")
-
 // Connection to New database on same server
 func newentity(district string, pin string, hospital_name string) bool {
 	stat := true
@@ -328,11 +314,8 @@ func newentity(district string, pin string, hospital_name string) bool {
 	query := "INSERT INTO test_schema.data (namess, pincode, district) SELECT * FROM (SELECT '" + hospital_name + "' AS namess, '" + pin + "' AS pincode, '" + district + "' AS district) AS temp WHERE NOT EXISTS( SELECT namess FROM test_schema.data WHERE district='" + district + "' AND pincode='" + pin + "');"
 
 	password := RandStringRunes(4)
-	//fmt.Println(password)
-	//ciphertext, _ := encrypt(keyd, []byte(password))
-	//fmt.Println(string(ciphertext))
+
 	_, errs := db.Query(" INSERT INTO test_schema.hospital (namess, passwords, oxygen_beds, ventilator_beds, normal_bed) SELECT * FROM (SELECT '" + hospital_name + "' AS namess, '" + password + "' AS passwords, '0' AS oxygen_beds,'0' AS ventilator_beds,'0' AS normal_bed) AS tmp WHERE NOT EXISTS ( SELECT namess FROM test_schema.hospital WHERE namess = '" + hospital_name + "' );")
-	//fmt.Println(" INSERT INTO test_schema.hospital (namess, passwords, oxygen_beds, ventilator_beds, normal_bed) SELECT * FROM (SELECT '" + hospital_name + "' AS namess, '" + password + "' AS passwords, '0' AS oxygen_beds,'0' AS ventilator_beds,'0' AS normal_bed) AS tmp WHERE NOT EXISTS ( SELECT namess FROM test_schema.hospital WHERE namess = '" + hospital_name + "' );")
 	_, err = db.Query(query)
 
 	if err != nil {
@@ -346,7 +329,6 @@ func newentity(district string, pin string, hospital_name string) bool {
 }
 
 //Hospital handler
-
 func hospital(w http.ResponseWriter, r *http.Request) {
 	session, _ := store.Get(r, "login")
 	if auth, err := session.Values["authenticated"].(bool); !err || !auth {
@@ -371,10 +353,8 @@ func hospitaldone(w http.ResponseWriter, r *http.Request) {
 
 func addbeds(oxy string, vent string, norm string, name string) bool {
 	stat := true
-	//fmt.Printf(" %v, %v, %v\n", oxy, vent, norm)
 	query := "UPDATE test_schema.hospital SET oxygen_beds='" + oxy + "', ventilator_beds='" + vent + "', normal_bed='" + norm + "' WHERE namess='" + name + "';"
-	//fmt.Println(query)
-	//query := "UPDATE test_schema.hospital SET oxygen_beds='0'"
+
 	db, err := sql.Open("mysql", "root:yes@tcp(localhost:3306)/test_schema")
 
 	if err != nil {
@@ -408,8 +388,7 @@ func HospitalLoginCheck(usr string, hpass string) bool {
 		if err := res.Scan(&passe); err != nil {
 			log.Fatal(err)
 		}
-		//temp, _ := decrypt(keyd, []byte(passe))
-		//fmt.Println(passe)
+
 		if string(passe) == hpass {
 			stat = true
 		}
