@@ -409,7 +409,7 @@ func HospitalLoginCheck(usr string, hpass string) bool {
 			log.Fatal(err)
 		}
 		//temp, _ := decrypt(keyd, []byte(passe))
-		fmt.Println(passe)
+		//fmt.Println(passe)
 		if string(passe) == hpass {
 			stat = true
 		}

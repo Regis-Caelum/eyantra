@@ -92,7 +92,7 @@ section::before {
 .container input[type="submit"] {
     /* border: 2px solid black; */
     border-radius: 20px;
-    height: 33px;
+    height: 36px;
     width: 77px;
     font-size: 16px;
     
