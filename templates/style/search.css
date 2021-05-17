@@ -28,11 +28,11 @@
 }
 .l4{
     position: relative;
-    left: 1050px;
+    left: 1210px;
 }
 .l5{
     position: relative;
-    left: 860px;
+    left: 1310px;
 }
 .navbar li a{
     text-decoration: none;
@@ -143,10 +143,3 @@ tr:nth-child(odd){
 
 }
 
- /* .box{ 
-    
-    width: 30%;
-    padding: 20px;
-    margin: 20px;
-    
-} */

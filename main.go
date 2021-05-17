@@ -6,6 +6,7 @@ import (
 	"html/template"
 	"log"
 	"math/rand"
+	"net"
 
 	//"math/rand"
 	"net/http"
@@ -90,8 +91,13 @@ func index(w http.ResponseWriter, r *http.Request) {
 
 // MAIN FUNCTION
 func main() {
+	listener, err := net.Listen("tcp", ":0")
+	if err != nil {
+		panic(err)
+	}
+
 	//Indicating that the server is up and running
-	fmt.Println("Serving at localhost:8080...")
+	fmt.Printf("Serving at http://localhost:%v\n", listener.Addr().(*net.TCPAddr).Port)
 
 	//Saving templates directory in the fileServer variable
 	fileServer := http.FileServer(http.Dir("./templates"))
@@ -109,7 +115,7 @@ func main() {
 	// http.HandleFunc("/error", search)
 
 	//Listening on port 8080
-	http.ListenAndServe(":8080", nil)
+	http.Serve(listener, nil)
 
 }
 
@@ -129,11 +135,11 @@ var info []Info
 
 func searching(w http.ResponseWriter, r *http.Request) {
 	//If condition satisfies executing the template
-	tpl.ExecuteTemplate(w, "index.html", nil)
+	tpl.ExecuteTemplate(w, "search.html", nil)
 }
 
 func search(w http.ResponseWriter, r *http.Request) {
-
+	//tpl.ExecuteTemplate(w,"index.html",)
 	//opening connection to mysql database
 	db, err := sql.Open("mysql", "root:yes@tcp(localhost:3306)/test_schema")
 
@@ -166,7 +172,7 @@ func search(w http.ResponseWriter, r *http.Request) {
 	}
 
 	for _, s := range list {
-		fmt.Println(s)
+		//fmt.Println(s)
 		query := "SELECT * FROM test_schema.hospital WHERE namess='" + s + "';"
 
 		res, _ := db.Query(query)
@@ -184,38 +190,15 @@ func search(w http.ResponseWriter, r *http.Request) {
 				norm: no,
 			}
 
-			fmt.Println(details)
+			//fmt.Println(details)
 
 			info = append(info, details)
 		}
 	}
 
-	// query := "SELECT * FROM test_schema.hospital WHERE namess='" + list[0] + "';"
+	tpl.ExecuteTemplate(w, "search.html", &info)
+	info = nil
 
-	// res, _ := db.Query(query)
-
-	// for res.Next() {
-	// 	var nam, o, v, no, temp string
-	// 	err = res.Scan(&nam, &temp, &o, &v, &no)
-	// 	if err != nil {
-	// 		panic(err.Error())
-	// 	}
-	// 	details := Info{
-	// 		nam,
-	// 		o,
-	// 		v,
-	// 		no,
-	// 	}
-
-	// 	fmt.Printf("%v\n", details)
-
-	// 	info = append(info, details)
-	// }
-
-	fmt.Printf("%v\n", len(info))
-	tpl.ExecuteTemplate(w, "index.html", &info)
-	//If condition satisfies executing the template
-	http.Redirect(w, r, "/search", http.StatusFound)
 }
 
 // Check in database for email and it's corresponding password
@@ -309,6 +292,7 @@ func newentry(w http.ResponseWriter, r *http.Request) {
 
 	//If condition satisfies executing the template
 	tpl.ExecuteTemplate(w, "main.html", &hospital_lists)
+	hospital_lists = nil
 }
 
 func temp(w http.ResponseWriter, r *http.Request) {

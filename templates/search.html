@@ -17,7 +17,7 @@
             <li class="l1"><a href="/">Home</a></li>
             <li class="l2"><a href="#">Contact us</a></li>
             <li class="l3"><a href="#">About us</a></li>
-            <!-- <li class="l4"><a href="#">Log Out</a></li> {% endcomment %} -->
+            <!-- <li class="l4"><a href="#">Log Out</a></li> -->
             <li class="l5"><a href="./login.html" action="/login">Log In</a></li>
         </ul>
     </nav>
@@ -29,7 +29,28 @@
             
                     <input class="searchbox" type="text" name="text" placeholder="Search Pincode">
                     <input class="btn" type="submit" name="" value="Submit">
+                
             </div>
+        </form>
+        <div class="box" id="box2">
+            <table>
+            <tr>
+                <th>Name</th>
+                <th>No. of Oxygen beds</th>
+                <th>No. of Ventilator beds</th>
+                <th>No. of Normal beds</th>
+            </tr>
+                {{range .}}
+                <tr>
+                    <td>{{.Name}}</td>
+                    <td>{{.Oxy}}</td>
+                    <td>{{.Vent}}</td>
+                    <td>{{.Norm}}</td>
+                </tr>
+                {{end}}
+            </table>
+
+        </div>
     </section>
 </body>
 
