@@ -157,7 +157,7 @@ tr:nth-child(odd){
 .container{
     position: relative;
     top: -370px;
-    left: 35%;
+    left: -20%;
 }
 tr{
     padding: 20%;
