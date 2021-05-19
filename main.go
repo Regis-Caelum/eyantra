@@ -107,12 +107,23 @@ func main() {
 	http.HandleFunc("/done", temp)
 	http.HandleFunc("/searching", searching)
 	http.HandleFunc("/search", search)
+	http.HandleFunc("/logout", logout)
 	http.HandleFunc("/hospital", hospital)
 	http.HandleFunc("/hospitaldone", hospitaldone)
 
 	//Listening on any free port given by the OS
 	http.Serve(listener, nil)
 
+}
+
+func logout(w http.ResponseWriter, r *http.Request) {
+	session, _ := store.Get(r, "login")
+	session.Values["authenticated"] = false
+
+	//Saving session value
+	session.Save(r, w)
+
+	http.Redirect(w, r, "/", http.StatusFound)
 }
 
 type Info struct {
