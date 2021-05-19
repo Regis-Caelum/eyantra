@@ -22,7 +22,7 @@ Project's back-end is written completely in golang, allowing the developer to ea
 
 Collaborator :- Vinay Katariya.
 
-GitHub Unsername :- katariyavinay.
+GitHub Username :- katariyavinay.
 
 Email :- katariyavr@rknec.edu.
 
@@ -30,6 +30,6 @@ Email :- katariyavr@rknec.edu.
 
 Collaborator :- Inshal Khan.
 
-GitHub Unsername :- Regis-Caelum.
+GitHub Username :- Regis-Caelum.
 
 Email :- khanmf@rknec.edu.
