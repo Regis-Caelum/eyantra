@@ -124,7 +124,7 @@ section::before {
 
  table{
     position: relative;
-    top: -320px;
+    top: -250px;
     left: 65%;
     transform: translate(-50%,-50%); 
     width: 143%;

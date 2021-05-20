@@ -2,12 +2,15 @@ package main
 
 import (
 	"database/sql"
+	"encoding/csv"
 	"fmt"
 	"html/template"
 	"log"
 	"math/rand"
 	"net"
 	"net/http"
+	"os"
+	"os/exec"
 
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/gorilla/sessions"
@@ -96,8 +99,13 @@ func main() {
 
 	//Indicating that the server is up and running
 	fmt.Printf("Serving at http://localhost:%v\n", listener.Addr().(*net.TCPAddr).Port)
-	//readData()
+	c := exec.Command("python3", "./webscrapper/web-s.py")
 
+	if err := c.Run(); err != nil {
+		fmt.Println("Error: ", err.Error())
+	}
+	readData()
+	fmt.Println("Updated to latest records...")
 	//Saving templates directory in the fileServer variable
 	fileServer := http.FileServer(http.Dir("./templates"))
 
@@ -424,52 +432,56 @@ func RandStringRunes(n int) string {
 }
 
 //--------------------------------------------------------Data filler-----------------------------------------------------------------------
-// type data struct {
-// 	name string
-// 	o2   string
-// 	dist string
-// 	pin  string
-// }
+type data struct {
+	sr   string
+	name string
+	o2   string
+	non2 string
+	icu  string
+	vent string
+}
 
-// var temps []data
+var temps []data
 
-// func readData() {
+func readData() {
 
-// 	db, _ := sql.Open("mysql", "root:yes@tcp(localhost:3306)/test_schema")
+	db, _ := sql.Open("mysql", "root:yes@tcp(localhost:3306)/test_schema")
 
-// 	defer db.Close()
+	defer db.Close()
 
-// 	csvFile, err := os.Open("./webscrapper/data/Available O2 beds.csv")
-// 	if err != nil {
-// 		fmt.Println(err)
-// 	}
-// 	fmt.Println("Successfully Opened CSV file")
-// 	defer csvFile.Close()
+	csvFile, err := os.Open("./webscrapper/data/test.csv")
+	if err != nil {
+		fmt.Println(err)
+	}
+	fmt.Println("Successfully Opened CSV file")
+	defer csvFile.Close()
 
-// 	csvLines, err := csv.NewReader(csvFile).ReadAll()
+	csvLines, err := csv.NewReader(csvFile).ReadAll()
 
-// 	if err != nil {
-// 		fmt.Println(err)
-// 	}
-// 	for _, line := range csvLines {
-// 		//fmt.Println(line)
-// 		emp := data{
-// 			name: line[0],
-// 			o2:   line[1],
-// 			dist: line[2],
-// 			pin:  line[3],
-// 		}
-// 		temps = append(temps, emp)
-// 	}
-// 	for _, x := range temps {
-// 		//fmt.Println(x)
-// 		query := "INSERT INTO test_schema.data (namess, pincode, district) SELECT * FROM (SELECT '" + x.name + "' AS namess, '" + x.pin + "' AS pincode, '" + x.dist + "' AS district) AS temp WHERE NOT EXISTS( SELECT namess FROM test_schema.data WHERE namess='" + x.name + "');"
-// 		//fmt.Println(query)
-// 		_, err := db.Query(query)
-// 		if err != nil {
-// 			fmt.Println(err.Error())
-// 		}
+	if err != nil {
+		fmt.Println(err)
+	}
+	for _, line := range csvLines {
+		//fmt.Println(line)
+		emp := data{
+			sr:   line[0],
+			name: line[1],
+			o2:   line[2],
+			non2: line[3],
+			icu:  line[4],
+			vent: line[5],
+		}
+		temps = append(temps, emp)
+	}
+	for _, x := range temps {
+		//fmt.Println(x)
+		query := "UPDATE test_schema.hospital SET oxygen_beds='" + x.o2 + "', ventilator_beds='" + x.vent + "', normal_bed='" + x.non2 + "' WHERE namess='" + x.name + "';"
+		//fmt.Println(query)
+		_, err := db.Query(query)
+		if err != nil {
+			fmt.Println(err.Error())
+		}
 
-// 	}
-
-// }
+	}
+	return
+}

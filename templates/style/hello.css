@@ -90,7 +90,7 @@ h1{
 
  #box2{
      text-align: center;
-     overflow-y: scroll;
+     overflow-y: auto;
  }
 
  .navbar{
