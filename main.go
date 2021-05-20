@@ -96,6 +96,7 @@ func main() {
 
 	//Indicating that the server is up and running
 	fmt.Printf("Serving at http://localhost:%v\n", listener.Addr().(*net.TCPAddr).Port)
+	//readData()
 
 	//Saving templates directory in the fileServer variable
 	fileServer := http.FileServer(http.Dir("./templates"))
@@ -421,3 +422,54 @@ func RandStringRunes(n int) string {
 	}
 	return string(b)
 }
+
+//--------------------------------------------------------Data filler-----------------------------------------------------------------------
+// type data struct {
+// 	name string
+// 	o2   string
+// 	dist string
+// 	pin  string
+// }
+
+// var temps []data
+
+// func readData() {
+
+// 	db, _ := sql.Open("mysql", "root:yes@tcp(localhost:3306)/test_schema")
+
+// 	defer db.Close()
+
+// 	csvFile, err := os.Open("./webscrapper/data/Available O2 beds.csv")
+// 	if err != nil {
+// 		fmt.Println(err)
+// 	}
+// 	fmt.Println("Successfully Opened CSV file")
+// 	defer csvFile.Close()
+
+// 	csvLines, err := csv.NewReader(csvFile).ReadAll()
+
+// 	if err != nil {
+// 		fmt.Println(err)
+// 	}
+// 	for _, line := range csvLines {
+// 		//fmt.Println(line)
+// 		emp := data{
+// 			name: line[0],
+// 			o2:   line[1],
+// 			dist: line[2],
+// 			pin:  line[3],
+// 		}
+// 		temps = append(temps, emp)
+// 	}
+// 	for _, x := range temps {
+// 		//fmt.Println(x)
+// 		query := "INSERT INTO test_schema.data (namess, pincode, district) SELECT * FROM (SELECT '" + x.name + "' AS namess, '" + x.pin + "' AS pincode, '" + x.dist + "' AS district) AS temp WHERE NOT EXISTS( SELECT namess FROM test_schema.data WHERE namess='" + x.name + "');"
+// 		//fmt.Println(query)
+// 		_, err := db.Query(query)
+// 		if err != nil {
+// 			fmt.Println(err.Error())
+// 		}
+
+// 	}
+
+// }

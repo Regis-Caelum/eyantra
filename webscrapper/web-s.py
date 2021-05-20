@@ -15,7 +15,7 @@ soup = BeautifulSoup(html_content.text, "html.parser")
 # print(soup.prettify()) # print the parsed data of html
 
 #class="table table-bordered"
-div = soup.find_all("div", id = "availO2")
+div = soup.find_all("div", id = "availventi")
 for x in div:
     table = x.find("table",class_="table table-bordered")
 #headings = [th.get_text().strip() for th in table.find("tr").find_all("th")]
@@ -45,7 +45,7 @@ fields = ['Hospital Name', 'O2 Beds']
 rows = len_2d
     
 # name of csv file 
-filename = "university_records.csv"
+filename = "./data/Available ventilator.csv"
     
 # writing to csv file 
 with open(filename, 'w') as csvfile: 
