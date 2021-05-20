@@ -1,1 +1,1 @@
-worker: ./hospital 
+worker: ./hospital -p $PORT
