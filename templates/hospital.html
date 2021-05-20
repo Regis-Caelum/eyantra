@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -7,37 +8,63 @@
     <title>Hospital</title>
     <link rel="stylesheet" href="./style/styleh.css">
 </head>
+
 <body>
     <header>
-        
+
         <nav class="navbar">
             <ul>
                 <li class="l1"><a href="/">Home</a></li>
                 <li class="l2"><a href="#">Contact us</a></li>
                 <li class="l3"><a href="#">About us</a></li>
                 <!-- <li class="l4"><a href="#">Log Out</a></li> {% endcomment %} -->
-                <li class="l5"><a href="/logout" action="/logout">Log Out</a></li>
+                <li class="l4"><a href="/logout" action="/logout">Log Out</a></li>
             </ul>
         </nav>
 
     </header>
     <section>
-        <div class="hospital">
-            <h1>Add Information</h1>
-            <form action="/hospitaldone" method="POST">
-                <p>Number of Oxygen bed available: <input type="number" name="oxy" placeholder="Enter no."></p>
-                <br>
+        <div class="container">
+            <div class="box" id="box1">
+                <div class="add" id="add1">
+                    <h1>Add Information</h1>
+                    <form action="/hospitaldone" method="POST">
+                        <p>Number of Oxygen bed available: <input type="number" name="oxy" placeholder="Enter no."></p>
+                        <br>
 
-                <p>Number of Ventilator bed available: <input type="number" name="vent" placeholder="Enter no."></p>
-                <br>
+                        <p>Number of Ventilator bed available: <input type="number" name="vent" placeholder="Enter no.">
+                        </p>
+                        <br>
 
-                <p>Number of Normal bed available: <input type="number" name="norm" placeholder="Enter no."></p>
-                
-                <p><input type="submit" name="" placeholder="Submit Now"></p>
+                        <p>Number of Normal bed available: <input type="number" name="norm" placeholder="Enter no."></p>
 
-            </form>
+                        <p><input type="submit" name="" placeholder="Submit Now"></p>
+
+                    </form>
+                </div>
+            </div>
+            <div class="box" id="box2">
+                <div class="add" id="add2">
+
+                    <h1>Current Status</h1>
+                    <form action="/hospitaldone" method="POST">
+                        <p>Number of Oxygen bed available: <input type="number" name="oxy" placeholder="Enter no."></p>
+                        <br>
+                        
+                        <p>Number of Ventilator bed available: <input type="number" name="vent" placeholder="Enter no.">
+                        </p>
+                        <br>
+                        
+                        <p>Number of Normal bed available: <input type="number" name="norm" placeholder="Enter no."></p>
+                        
+                        <p><input type="submit" name="" placeholder="Submit Now"></p>
+                        
+                    </form>
+                </div>
+            </div>
         </div>
     </section>
-    
+
 </body>
+
 </html>
