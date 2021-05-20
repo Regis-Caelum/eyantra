@@ -483,5 +483,4 @@ func readData() {
 		}
 
 	}
-	return
 }
