@@ -90,7 +90,7 @@ h1{
 
  #box2{
      text-align: center;
-     overflow-y: auto;
+     overflow-y:scroll;
  }
 
  .navbar{
@@ -131,17 +131,19 @@ h1{
 
 table{
     position: absolute;
-    top: 20%;
-    left: 65%;
+    display: block;
+    top: 36%;
+    left: 63%;
     /* transform: translate(-50%,-50%); */
     width: 30%;
-    height: auto;
+    height: 400px;
     box-shadow: 0 5px 12px rbga(32,32,32,.3);
     text-align: center;
     overflow: hidden;
     border-radius: 10px 10px 0 0 ;
     border-spacing: 0;
-    
+    overflow-y: scroll;
+    border: 2px solid black;
 }
 
 th,td{
