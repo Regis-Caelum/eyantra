@@ -44,7 +44,7 @@ h1{
 
  .add input{
     width: 100%;
-    margin-bottom: 10px;
+    margin-bottom: 16px;
 }
 
 .add input[type="text"] 
@@ -119,7 +119,7 @@ h1{
 }
 .l4{
     position: relative;
-    left: 1115px;
+    left: 1385px;
 }
 .navbar li a{
     text-decoration: none;
@@ -132,11 +132,11 @@ h1{
 table{
     position: absolute;
     display: block;
-    top: 36%;
+    top: 16%;
     left: 63%;
     /* transform: translate(-50%,-50%); */
     width: 30%;
-    height: 400px;
+    height: 800px;
     box-shadow: 0 5px 12px rbga(32,32,32,.3);
     text-align: center;
     overflow: hidden;

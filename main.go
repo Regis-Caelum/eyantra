@@ -30,8 +30,9 @@ func (p *hospital_list) Name() string     { return p.name }
 
 //--------------------------------------------------session variables------------------------------------------------------------
 var (
-	key   = []byte("secret-key")
-	store = sessions.NewCookieStore(key)
+	key    = []byte("secret-key")
+	store  = sessions.NewCookieStore(key)
+	emails string
 )
 
 //--------------------------------------------------Template initializer---------------------------------------------------------
@@ -64,7 +65,8 @@ func index(w http.ResponseWriter, r *http.Request) {
 		husr = r.PostFormValue("huser")
 		static_name = husr
 		hpass = r.PostFormValue("hpass")
-
+		emails = string(husr)
+		//fmt.Println(emails, husr)
 		check := HospitalLoginCheck(husr, hpass)
 
 		if check {
@@ -79,7 +81,6 @@ func index(w http.ResponseWriter, r *http.Request) {
 		email = r.PostFormValue("auser")
 		pass = r.PostFormValue("apass")
 		chck := AdminLoginCheck(string(email), string(pass))
-
 		if chck {
 			http.Redirect(w, r, "/main", http.StatusFound)
 		} else {
@@ -147,7 +148,7 @@ func (p *Info) Oxy() string  { return p.oxy }
 func (p *Info) Norm() string { return p.norm }
 func (p *Info) Vent() string { return p.vent }
 
-var info []Info
+var info, info2 []Info
 
 func searching(w http.ResponseWriter, r *http.Request) {
 	//If condition satisfies executing the template
@@ -355,7 +356,30 @@ func hospital(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "Forbidden", http.StatusForbidden)
 		return
 	}
-	tpl.ExecuteTemplate(w, "hospital.html", nil)
+	db, _ := sql.Open("mysql", "root:yes@tcp(localhost:3306)/test_schema")
+
+	query := "SELECT * FROM test_schema.hospital WHERE namess='" + emails + "';"
+	//fmt.Println(query)
+	res, _ := db.Query(query)
+
+	for res.Next() {
+		var nam, o, v, no, temp string
+		err := res.Scan(&nam, &temp, &o, &v, &no)
+		if err != nil {
+			panic(err.Error())
+		}
+		details := Info{
+			name: nam,
+			oxy:  o,
+			vent: v,
+			norm: no,
+		}
+
+		info2 = append(info2, details)
+	}
+
+	tpl.ExecuteTemplate(w, "hospital.html", &info2)
+	info2 = nil
 }
 
 func hospitaldone(w http.ResponseWriter, r *http.Request) {

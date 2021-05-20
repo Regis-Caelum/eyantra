@@ -20,7 +20,7 @@
     border: 1px solid rgb(213, 241, 245);
     color:rgb(0, 0, 0);
     position: absolute;
-    top: 50%;
+    top: 30%;
     left: 25%;
     transform: translate(-50%,-50%);
     box-sizing: border-box;
@@ -38,7 +38,7 @@
     border: 1px solid rgb(213, 241, 245);
     color:rgb(0, 0, 0);
     position: absolute;
-    top: 50%;
+    top: 30%;
     left: 78%;
     transform: translate(-50%,-50%);
     box-sizing: border-box;
@@ -63,7 +63,7 @@ h1{
 
  .add input{
     width: 100%;
-    margin-bottom: 10px;
+    margin-bottom: 40px;
 }
 
 .add input[type="number"]
@@ -123,7 +123,7 @@ h1{
 }
 .l4{
     position: relative;
-    left: 1115px;
+    left: 1380px;
 }
 .navbar li a{
     text-decoration: none;
@@ -131,4 +131,30 @@ h1{
 }
 .navbar li :hover{
     color: rgb(0, 255, 0);
+}
+table{
+    position: absolute;
+    display: block;
+    top: 16%;
+    left: 63%;
+    /* transform: translate(-50%,-50%); */
+    width: 30%;
+    height: 595px;
+    box-shadow: 0 5px 12px rbga(32,32,32,.3);
+    text-align: center;
+    overflow: hidden;
+    border-radius: 10px 10px 0 0 ;
+    border-spacing: 0;
+}
+th,td{
+    padding: 10px,12px;
+}
+
+th{
+    background: #ba68c8;
+    position: sticky;
+}
+tr:nth-child(odd){
+    background-color: #eeeeee;
+
 }
