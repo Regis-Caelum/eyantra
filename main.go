@@ -6,8 +6,8 @@ import (
 	"html/template"
 	"log"
 	"math/rand"
+	"net"
 	"net/http"
-	"os"
 
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/gorilla/sessions"
@@ -90,13 +90,13 @@ func index(w http.ResponseWriter, r *http.Request) {
 
 // MAIN FUNCTION
 func main() {
-	// listener, err := net.Listen("tcp", ":0")
-	// if err != nil {
-	// 	panic(err)
-	// }
+	listener, err := net.Listen("tcp", ":0")
+	if err != nil {
+		panic(err)
+	}
 
 	//Indicating that the server is up and running
-	//fmt.Printf("Serving at http://localhost:%v\n", listener.Addr().(*net.TCPAddr).Port)
+	fmt.Printf("Serving at http://localhost:%v\n", listener.Addr().(*net.TCPAddr).Port)
 	// c := exec.Command("python3", "./webscrapper/web-s.py")
 
 	// if err := c.Run(); err != nil {
@@ -119,11 +119,7 @@ func main() {
 	http.HandleFunc("/hospitaldone", hospitaldone)
 
 	//Listening on any free port given by the OS
-	port := os.Getenv("PORT")
-	fmt.Printf("Starting server at port available %v\n", port)
-	if err := http.ListenAndServe(":"+port, nil); err != nil {
-		log.Fatal(err)
-	}
+	http.Serve(listener, nil)
 
 }
 

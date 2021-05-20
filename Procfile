@@ -1,1 +1,1 @@
-web: ./hospital
+worker: ./hospital 
