@@ -5,7 +5,7 @@ Project on eyantra ideas on covid-19
 # Project Idea
 ### Idea : Bed service providing web app for connecting hospitals and users
 
-Project is a web app which connects users to hospital authorities by allowing hospital authorities to update the no. of beds (oxygen, ventilator,normal) on the application.
+Project is a web app which connects users to hospital authorities by allowing hospital authorities to update the no. of beds (oxygen, ventilator, normal) on the application.
 Allowing the user to locate the nearest hospital having sufficient supplies for beds and enough vacancy for admission.
 
 Project's back-end is written completely in golang, allowing the developer to easily route and authenticate users and update the mysql database.
