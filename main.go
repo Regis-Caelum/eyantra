@@ -2,15 +2,12 @@ package main
 
 import (
 	"database/sql"
-	"encoding/csv"
 	"fmt"
 	"html/template"
 	"log"
 	"math/rand"
 	"net"
 	"net/http"
-	"os"
-	"os/exec"
 
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/gorilla/sessions"
@@ -100,12 +97,12 @@ func main() {
 
 	//Indicating that the server is up and running
 	fmt.Printf("Serving at http://localhost:%v\n", listener.Addr().(*net.TCPAddr).Port)
-	c := exec.Command("python3", "./webscrapper/web-s.py")
+	// c := exec.Command("python3", "./webscrapper/web-s.py")
 
-	if err := c.Run(); err != nil {
-		fmt.Println("Error: ", err.Error())
-	}
-	readData()
+	// if err := c.Run(); err != nil {
+	// 	fmt.Println("Error: ", err.Error())
+	// }
+	//readData()
 	fmt.Println("Updated to latest records...")
 	//Saving templates directory in the fileServer variable
 	fileServer := http.FileServer(http.Dir("./templates"))
@@ -157,7 +154,7 @@ func searching(w http.ResponseWriter, r *http.Request) {
 
 func search(w http.ResponseWriter, r *http.Request) {
 	//opening connection to mysql database
-	db, err := sql.Open("mysql", "root:yes@tcp(localhost:3306)/test_schema")
+	db, err := sql.Open("mysql", "sql4413785:xp7qaQRnNs@tcp(sql4.freesqldatabase.com)/sql4413785")
 
 	//checking for error in the connection
 	if err != nil {
@@ -173,7 +170,7 @@ func search(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	q := "SELECT namess FROM test_schema.data WHERE pincode='" + text + "';"
+	q := "SELECT namess FROM sql4413785.data WHERE pincode='" + text + "';"
 
 	result, _ := db.Query(q)
 
@@ -188,7 +185,7 @@ func search(w http.ResponseWriter, r *http.Request) {
 	}
 
 	for _, s := range list {
-		query := "SELECT * FROM test_schema.hospital WHERE namess='" + s + "';"
+		query := "SELECT * FROM sql4413785.hospital WHERE namess='" + s + "';"
 
 		res, _ := db.Query(query)
 
@@ -220,7 +217,7 @@ func AdminLoginCheck(mail string, pass string) bool {
 	status := false
 
 	//opening connection to mysql database
-	db, err := sql.Open("mysql", "root:yes@tcp(localhost:3306)/test_schema")
+	db, err := sql.Open("mysql", "sql4413785:xp7qaQRnNs@tcp(sql4.freesqldatabase.com)/sql4413785")
 
 	//checking for error in the connection
 	if err != nil {
@@ -230,7 +227,7 @@ func AdminLoginCheck(mail string, pass string) bool {
 	defer db.Close()
 
 	//SQL query
-	query := "SELECT Passwords FROM test_schema.database WHERE Email ='" + mail + "'"
+	query := "SELECT Passwords FROM sql4413785.database WHERE Email ='" + mail + "'"
 
 	//Executing query
 	res, err := db.Query(query)
@@ -274,11 +271,11 @@ func newentry(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	db, _ := sql.Open("mysql", "root:yes@tcp(localhost:3306)/test_schema")
+	db, _ := sql.Open("mysql", "sql4413785:xp7qaQRnNs@tcp(sql4.freesqldatabase.com)/sql4413785")
 
 	defer db.Close()
 
-	query := "SELECT * FROM test_schema.data;"
+	query := "SELECT * FROM sql4413785.data;"
 
 	res, _ := db.Query(query)
 
@@ -324,7 +321,7 @@ func temp(w http.ResponseWriter, r *http.Request) {
 // Connection to New database on same server
 func newentity(district string, pin string, hospital_name string) bool {
 	stat := true
-	db, err := sql.Open("mysql", "root:yes@tcp(localhost:3306)/test_schema")
+	db, err := sql.Open("mysql", "sql4413785:xp7qaQRnNs@tcp(sql4.freesqldatabase.com)/sql4413785")
 
 	if err != nil {
 		fmt.Printf("not connected")
@@ -332,11 +329,11 @@ func newentity(district string, pin string, hospital_name string) bool {
 
 	defer db.Close()
 
-	query := "INSERT INTO test_schema.data (namess, pincode, district) SELECT * FROM (SELECT '" + hospital_name + "' AS namess, '" + pin + "' AS pincode, '" + district + "' AS district) AS temp WHERE NOT EXISTS( SELECT namess FROM test_schema.data WHERE district='" + district + "' AND pincode='" + pin + "');"
+	query := "INSERT INTO sql4413785.data (namess, pincode, district) SELECT * FROM (SELECT '" + hospital_name + "' AS namess, '" + pin + "' AS pincode, '" + district + "' AS district) AS temp WHERE NOT EXISTS( SELECT namess FROM sql4413785.data WHERE district='" + district + "' AND pincode='" + pin + "');"
 
 	password := RandStringRunes(4)
 
-	_, errs := db.Query(" INSERT INTO test_schema.hospital (namess, passwords, oxygen_beds, ventilator_beds, normal_bed) SELECT * FROM (SELECT '" + hospital_name + "' AS namess, '" + password + "' AS passwords, '0' AS oxygen_beds,'0' AS ventilator_beds,'0' AS normal_bed) AS tmp WHERE NOT EXISTS ( SELECT namess FROM test_schema.hospital WHERE namess = '" + hospital_name + "' );")
+	_, errs := db.Query(" INSERT INTO sql4413785.hospital (namess, passwords, oxygen_beds, ventilator_beds, normal_bed) SELECT * FROM (SELECT '" + hospital_name + "' AS namess, '" + password + "' AS passwords, '0' AS oxygen_beds,'0' AS ventilator_beds,'0' AS normal_bed) AS tmp WHERE NOT EXISTS ( SELECT namess FROM sql4413785.hospital WHERE namess = '" + hospital_name + "' );")
 	_, err = db.Query(query)
 
 	if err != nil {
@@ -356,9 +353,9 @@ func hospital(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "Forbidden", http.StatusForbidden)
 		return
 	}
-	db, _ := sql.Open("mysql", "root:yes@tcp(localhost:3306)/test_schema")
+	db, _ := sql.Open("mysql", "sql4413785:xp7qaQRnNs@tcp(sql4.freesqldatabase.com)/sql4413785")
 
-	query := "SELECT * FROM test_schema.hospital WHERE namess='" + emails + "';"
+	query := "SELECT * FROM sql4413785.hospital WHERE namess='" + emails + "';"
 	//fmt.Println(query)
 	res, _ := db.Query(query)
 
@@ -397,9 +394,9 @@ func hospitaldone(w http.ResponseWriter, r *http.Request) {
 
 func addbeds(oxy string, vent string, norm string, name string) bool {
 	stat := true
-	query := "UPDATE test_schema.hospital SET oxygen_beds='" + oxy + "', ventilator_beds='" + vent + "', normal_bed='" + norm + "' WHERE namess='" + name + "';"
+	query := "UPDATE sql4413785.hospital SET oxygen_beds='" + oxy + "', ventilator_beds='" + vent + "', normal_bed='" + norm + "' WHERE namess='" + name + "';"
 
-	db, err := sql.Open("mysql", "root:yes@tcp(localhost:3306)/test_schema")
+	db, err := sql.Open("mysql", "sql4413785:xp7qaQRnNs@tcp(sql4.freesqldatabase.com)/sql4413785")
 
 	if err != nil {
 		fmt.Printf("not connected")
@@ -418,13 +415,13 @@ func addbeds(oxy string, vent string, norm string, name string) bool {
 
 func HospitalLoginCheck(usr string, hpass string) bool {
 	stat := false
-	db, err := sql.Open("mysql", "root:yes@tcp(localhost:3306)/test_schema")
+	db, err := sql.Open("mysql", "sql4413785:xp7qaQRnNs@tcp(sql4.freesqldatabase.com)/sql4413785")
 
 	if err != nil {
 		fmt.Printf("not connected")
 	}
 	defer db.Close()
-	query := "SELECT passwords FROM test_schema.hospital WHERE namess ='" + usr + "'"
+	query := "SELECT passwords FROM sql4413785.hospital WHERE namess ='" + usr + "'"
 	res, _ := db.Query(query)
 
 	for res.Next() {
@@ -456,55 +453,55 @@ func RandStringRunes(n int) string {
 }
 
 //--------------------------------------------------------Data filler-----------------------------------------------------------------------
-type data struct {
-	sr   string
-	name string
-	o2   string
-	non2 string
-	icu  string
-	vent string
-}
+// type data struct {
+// 	sr   string
+// 	name string
+// 	o2   string
+// 	non2 string
+// 	icu  string
+// 	vent string
+// }
 
-var temps []data
+// var temps []data
 
-func readData() {
+// func readData() {
 
-	db, _ := sql.Open("mysql", "root:yes@tcp(localhost:3306)/test_schema")
+// 	db, err := sql.Open("mysql", "sql4413785:xp7qaQRnNs@tcp(sql4.freesqldatabase.com)/sql4413785")
 
-	defer db.Close()
+// 	defer db.Close()
 
-	csvFile, err := os.Open("./webscrapper/data/test.csv")
-	if err != nil {
-		fmt.Println(err)
-	}
-	fmt.Println("Successfully Opened CSV file")
-	defer csvFile.Close()
+// 	csvFile, err := os.Open("./webscrapper/data/test.csv")
+// 	if err != nil {
+// 		fmt.Println(err)
+// 	}
+// 	fmt.Println("Successfully Opened CSV file")
+// 	defer csvFile.Close()
 
-	csvLines, err := csv.NewReader(csvFile).ReadAll()
+// 	csvLines, err := csv.NewReader(csvFile).ReadAll()
 
-	if err != nil {
-		fmt.Println(err)
-	}
-	for _, line := range csvLines {
-		//fmt.Println(line)
-		emp := data{
-			sr:   line[0],
-			name: line[1],
-			o2:   line[2],
-			non2: line[3],
-			icu:  line[4],
-			vent: line[5],
-		}
-		temps = append(temps, emp)
-	}
-	for _, x := range temps {
-		//fmt.Println(x)
-		query := "UPDATE test_schema.hospital SET oxygen_beds='" + x.o2 + "', ventilator_beds='" + x.vent + "', normal_bed='" + x.non2 + "' WHERE namess='" + x.name + "';"
-		//fmt.Println(query)
-		_, err := db.Query(query)
-		if err != nil {
-			fmt.Println(err.Error())
-		}
+// 	if err != nil {
+// 		fmt.Println(err)
+// 	}
+// 	for _, line := range csvLines {
+// 		//fmt.Println(line)
+// 		emp := data{
+// 			sr:   line[0],
+// 			name: line[1],
+// 			o2:   line[2],
+// 			non2: line[3],
+// 			icu:  line[4],
+// 			vent: line[5],
+// 		}
+// 		temps = append(temps, emp)
+// 	}
+// 	for _, x := range temps {
+// 		//fmt.Println(x)
+// 		query := "UPDATE sql4413785.hospital SET oxygen_beds='" + x.o2 + "', ventilator_beds='" + x.vent + "', normal_bed='" + x.non2 + "' WHERE namess='" + x.name + "';"
+// 		//fmt.Println(query)
+// 		_, err := db.Query(query)
+// 		if err != nil {
+// 			fmt.Println(err.Error())
+// 		}
 
-	}
-}
+// 	}
+// }
