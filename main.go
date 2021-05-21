@@ -399,7 +399,24 @@ func hospitaldone(w http.ResponseWriter, r *http.Request) {
 
 func addbeds(oxy string, vent string, norm string, name string) bool {
 	stat := true
-	query := "UPDATE sql4413785.hospital SET oxygen_beds='" + oxy + "', ventilator_beds='" + vent + "', normal_bed='" + norm + "' WHERE namess='" + name + "';"
+	var query string
+	if oxy == "" && vent == "" && norm == "" {
+		query = " "
+	} else if oxy == "" && vent == "" {
+		query = "UPDATE sql4413785.hospital SET normal_bed='" + norm + "' WHERE namess='" + name + "';"
+	} else if oxy == "" && norm == "" {
+		query = "UPDATE sql4413785.hospital SET ventilator_beds='" + vent + "' WHERE namess='" + name + "';"
+	} else if vent == "" && norm == "" {
+		query = "UPDATE sql4413785.hospital SET oxygen_beds='" + oxy + "' WHERE namess='" + name + "';"
+	} else if oxy == "" {
+		query = "UPDATE sql4413785.hospital SET ventilator_beds='" + vent + "', normal_bed='" + norm + "' WHERE namess='" + name + "';"
+	} else if vent == "" {
+		query = "UPDATE sql4413785.hospital SET oxygen_beds='" + oxy + "', normal_bed='" + norm + "' WHERE namess='" + name + "';"
+	} else if norm == "" {
+		query = "UPDATE sql4413785.hospital SET oxygen_beds='" + oxy + "', ventilator_beds='" + vent + "', normal_bed='" + norm + "' WHERE namess='" + name + "';"
+	} else {
+		query = "UPDATE sql4413785.hospital SET oxygen_beds='" + oxy + "', ventilator_beds='" + vent + "' WHERE namess='" + name + "';"
+	}
 
 	db, err := sql.Open("mysql", "sql4413785:xp7qaQRnNs@tcp(sql4.freesqldatabase.com)/sql4413785")
 
