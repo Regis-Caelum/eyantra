@@ -14,13 +14,13 @@
 
 #add1{
     width: 520px;
-    height: 400px;
+    height: 450px;
     box-shadow: 0px 0px 3px 3px rgb(39, 75, 238);
     background: rgb(213, 241, 245);
     border: 1px solid rgb(213, 241, 245);
     color:rgb(0, 0, 0);
     position: absolute;
-    top: 30%;
+    top: 45%;
     left: 25%;
     transform: translate(-50%,-50%);
     box-sizing: border-box;
@@ -38,7 +38,7 @@
     border: 1px solid rgb(213, 241, 245);
     color:rgb(0, 0, 0);
     position: absolute;
-    top: 30%;
+    top: 45%;
     left: 78%;
     transform: translate(-50%,-50%);
     box-sizing: border-box;
@@ -123,7 +123,7 @@ h1{
 }
 .l4{
     position: relative;
-    left: 1380px;
+    left: 1115px;
 }
 .navbar li a{
     text-decoration: none;
@@ -135,8 +135,8 @@ h1{
 table{
     position: absolute;
     display: block;
-    top: 16%;
-    left: 63%;
+    top: 23%;
+    left: 60%;
     /* transform: translate(-50%,-50%); */
     width: 30%;
     height: 595px;
@@ -157,4 +157,8 @@ th{
 tr:nth-child(odd){
     background-color: #eeeeee;
 
+}
+
+h2{
+    text-align: center;
 }

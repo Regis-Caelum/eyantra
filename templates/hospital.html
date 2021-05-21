@@ -44,22 +44,24 @@
                 </div>
             </div>
             <div class="box" id="box2">
-                <h2>Hospital Current Status</h2>
+                <div class="add" id="add2">
 
-                <table>
-                <tr>
-                    <th>Number of Oxygen Beds</th>
-                    <th>Number of Ventilator Beds</th>
-                    <th>Number of Normal Beds</th>
-                </tr>
-                    {{range .}}
-                    <tr>
-                        <td>{{.Oxy}}</td>
-                        <td>{{.Vent}}</td>
-                        <td>{{.Norm}}</td>
-                    </tr>
-                    {{end}}
-                </table>
+                    <h2>Hospital Current Status</h2>
+                    
+                    <form action="" method="">
+                        <p>Number of Oxygen bed available: <input type="number" name="oxy" placeholder="Enter no."></p>
+                        <br>
+                        
+                        <p>Number of Ventilator bed available: <input type="number" name="vent" placeholder="Enter no.">
+                        </p>
+                        <br>
+                        
+                        <p>Number of Normal bed available: <input type="number" name="norm" placeholder="Enter no."></p>
+                        
+                        <!-- <p><input type="submit" name="" placeholder="Submit Now"></p> -->
+                        
+                    </form>
+                </div>
             </div>
         </div>
     </section>

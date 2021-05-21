@@ -112,3 +112,50 @@ section::before {
     #hos{
         left: 450px;
     }
+
+    *{
+        margin: 0;
+        padding: 0;
+    }
+    /* body{
+        background: url('../static/bg1.jpg') no-repeat center center/cover;
+    } */
+    .navbar{
+        margin-top: 6px;
+        border: 2px solid black;
+        width: 99%;
+        height: 45px;
+        background-color: black;
+        color: white;
+        opacity: 0.7;
+        border-radius: 30px;
+        margin-left: 3px;
+       
+    }
+    .navbar ul{
+        overflow: auto;
+    }
+    
+    .navbar li{
+        float: left;
+        list-style: none;
+        padding: 3px 22px;
+        margin-top: 10px;
+        margin-left: 10px;
+        font-size: 17px;
+    }
+    .l4{
+        position: relative;
+        left: 1325px;
+    }
+    .l5{
+        position: relative;
+        left: 1035px;
+    }
+    .navbar li a{
+        text-decoration: none;
+        color: white;
+    }
+    .navbar li :hover{
+        color: rgb(0, 255, 0);
+    }
