@@ -124,16 +124,17 @@ section::before {
 
  table{
     position: relative;
-    top: -380px;
+    top: -120px;
     left: 65%;
     transform: translate(-50%,-50%); 
     width: 143%;
-    height: auto;
+    height: 300px;
     box-shadow: 0 5px 12px rbga(32,32,32,.3);
     text-align: center;
     overflow: hidden;
     border-radius: 10px 10px 0 0 ;
     border-spacing: 0;
+    border: 1px solid black;
 } 
 
 th{
